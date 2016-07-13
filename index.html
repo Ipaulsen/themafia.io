@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Smartphone Controller Game</title>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<link href="public/css/main.css" rel="stylesheet">
+<body>
+<script>
+var io = io.connect();
+
+io.on('connect', function() {
+	if (window.location.href.indexOf('?id=') > 0) {
+	  io.emit('controller_connect', window.location.href.split('?id=')[1]);
+	  	io.on('controller_connected', function(connected,playerNumber) {
+
+		  if (connected) {
+
+		    alert("Your a controller - Connected! "+playerNumber);
+
+		  } else {
+
+		    alert("Your a controller - Not connected!");
+		  }
+
+	});
+	} else {
+	  io.emit('game_connect');
+		var game_connected = function() {
+		  var url = "http://10.0.10.34:8080?id=" + io.id;
+		  document.body.innerHTML += "Url for Mafia members only: "+url;
+		  io.removeListener('game_connected', game_connected);
+		};
+
+		io.on('game_connected', game_connected);
+	}
+});
+</script>
+</body>
+</html>
