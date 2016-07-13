@@ -28,7 +28,7 @@ io.on('connect', function() {
 	} else {
 	  io.emit('game_connect');
 		var game_connected = function() {
-		  var url = "http://10.0.10.34:8080?id=" + io.id;
+		  var url = "http://**your-ip**:8080?id=" + io.id;
 		  document.body.innerHTML += "Url for Mafia members only: "+url;
 		  io.removeListener('game_connected', game_connected);
 		};
