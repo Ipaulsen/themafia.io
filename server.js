@@ -81,6 +81,11 @@ io.sockets.on('connection', function (socket) {
 	  }
 
 	});
+	//game board updates
+	socket.on('updateGB', function(playerObject){
+		console.log("Player Object: "+util.inspect(playerObject));
+		io.emit('updateGB', playerObject);
+	});
 	//on socket disconnection
 	socket.on('disconnect', function () {
 
