@@ -55,15 +55,17 @@ $('#addone').click(function() {
     addOne();
 });
 
-function addOne(){
+function addOne(playerName){
     // do not append to current, otherwise you see it moving through the container
     $('.field').addClass('moveAni');
     
     $('<div/>', {
             'class': 'field',
-            'text': $('.field').length +1
+            'text': playerName
     })
     
+
+
     .css({
         left: $('#container').width()/2-25 + 'px',
         top: $('#container').height()/2-25 + 'px'})
@@ -124,13 +126,9 @@ $('#delone').click(function() {
     $('input:text').val($('.field:not([deleting])').length); // update yet
 });
 
-
 createFields();
 distributeFields();
 initPointAt();
-
-    
-
 
 function initPointAt() {
     $('.field').pointat({
