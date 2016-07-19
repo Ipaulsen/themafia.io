@@ -32,7 +32,7 @@ io.on('connect', function() {
 	} else {
 	  io.emit('game_connect');
 		var game_connected = function() {
-		  var url = "http://***your-ip***?id=" + io.id;
+		  var url = "http://127.0.0.1:8080?id=" + io.id;
 		  $("#urlController").append("Url for Mafia members only: "+"<a href=\""+url+"\" target=\"_blank\">"+url+"</a>");
 		  io.removeListener('game_connected', game_connected);
 		};
