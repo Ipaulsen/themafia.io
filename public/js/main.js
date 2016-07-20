@@ -1,5 +1,5 @@
 // global vars
-var palyerCount;
+var playerCount;
 
 //controller vars
 var playerID;
