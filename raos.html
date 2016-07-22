@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Smartphone Controller Game</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+</head>
+<link href="public/css/main.css" rel="stylesheet">
+<body>
+<script src="public/js/main.js"></script>
+<section id="gameBoard">
+	<div id="playerCrossHairs">
+		<div id="container">
+		    <div id="center"></div>
+		    <div id="crosshair-x"></div>
+		    <div id="crosshair-y"></div>
+		</div>	
+		<div id="message">
+			Number of players: <input type="text" value="0" />
+			<button id="addone">++</button>
+			<button id="delone">--</button>
+			<br>
+			<p id="urlController"></p>
+		</div>
+	</div>
+</section>
+<section id="controller">	
+	<p id="controllerMessage"></p>
+</section>
+</body>
+  <script src="public/js/pointat.min.js"></script>
+  <script src="public/js/rotate-1.0.1.min.js"></script>
+  <script src="public/js/player+-.js"></script>
+</html>
