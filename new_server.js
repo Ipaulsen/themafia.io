@@ -23,18 +23,20 @@ app.get('/', function(req, res) {
 
 //set up serve code name raos AKA the game board
 app.get('/raos', function(req, res) {
-	//3 options for request origins 1.Game Board 2.Join Code 3.Direct controller Url.
+	//3 options for request origins 1.Direct controller Url. 2.Wrong join code 3.New board game request.
 	var requestQuery = req.query;
-	//if this is a join code route them to the right game board
+	//1. If this is a join code route them to the right game board
 	if(requestQuery.code && join_codes[requestQuery.code]){
-				var keyCovert = join_codes[requestQuery.code];
-				keyCovert = keyCovert.replace("/#", "");
-				res.redirect("/raos?id="+keyCovert);
-
-		//if wrong join code send them back to index
-		res.redirect('/raos?error=code_not_found');
+		var keyCovert = join_codes[requestQuery.code];
+		keyCovert = keyCovert.replace("/#", "");
+		res.redirect("/raos?id="+keyCovert);
+	}
+	else if(requestQuery.code){
+		//2. If join code does not exist then send them back to index
+		res.redirect('/?error=code_not_found');
 	}
 	else{
+		//3. This would be a new board game request
 		res.sendFile(__dirname + '/raos.html');
 	}
 });
@@ -67,8 +69,9 @@ io.sockets.on('connection', function (socket) {
 		}
 		join_codes[join_code] = socket.id;
 		game_sockets[socket.id] = socket;
-
-		socket.emit("game_connected");
+		console.log("Join code: "+util.inspect(join_codes));
+		//Let the board know that they are connected to the server and send the join codes for the controller to use.
+		socket.emit("game_connected",join_code);
 	});
 	//there will be no controller id param if there has not been one created.
 	socket.on('controller_connect', function(game_id,controller_id){
@@ -82,8 +85,7 @@ io.sockets.on('connection', function (socket) {
 			//add a controller to the game board
 			//notify the game board of the new player.
 			console.log(game_id);
-			game_sockets[game_id].socket.emit("controller_connected", true);
-			socket.emit("controller_connected",true,0);
+			socket.emit("controller_connected",true,0);//right now this is 0 but should be the player number that the game board has stored.
 		}
 		else {
 			console.log("Controller attempted to connect but failed 1st else");

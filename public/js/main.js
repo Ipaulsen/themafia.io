@@ -32,8 +32,9 @@ io.on('connect', function() {
 		//game board connect logic	
 		io.emit('board_connect');
 		$("#gameBoard").css("display","block");
-		var game_connected = function() {
-			var url = "http://10.0.10.34:8080/raos?id=" + io.id;
+		var game_connected = function(join_code) {
+			console.log(game_connected+","+join_code);
+			var url = "http://10.0.10.34:8080/raos?code=" + join_code;
 			$("#urlController").append("Url for Mafia members only: "+"<a href=\""+url+"\" target=\"_blank\">"+url+"</a>");
 			io.removeListener('game_connected', game_connected);
 		};
