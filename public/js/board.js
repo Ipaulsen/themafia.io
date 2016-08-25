@@ -23,7 +23,8 @@ var LYNCH_STATE = "lynch"; //we might not need this state.
 var MAFIA_VOTE_STATE = "mafia_vote";
 var SPECIAL_CHARACTER_VOTE_STATE = "special_char_vote";
 
-var io = io.connect();
+//this is initilized by main.js
+// var io = io.connect();
 
 
 var players = [];

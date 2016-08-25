@@ -84,7 +84,7 @@ io.sockets.on('connection', function (socket) {
 			//look up the game board and make sure that it's 'open'.
 			//add a controller to the game board
 			//notify the game board of the new player.
-			console.log(game_id);
+			console.log("Controller connected:"+ game_id);
 			socket.emit("controller_connected",true,0);//right now this is 0 but should be the player number that the game board has stored.
 		}
 		else {
@@ -97,8 +97,10 @@ io.sockets.on('connection', function (socket) {
         //we could change this to 'notify_controller'. Basically we need a function to pass messages from the board to one or all of the controllers.
     });
 
-    socket.on('notify_board', function(){ //a game board connected.
+    socket.on('notify_board', function(playerObject){ //a game board connected.
         //basically this needs to just pass messages from the controller to the board.
+        console.log(playerObject);
+        io.emit('notify_board', playerObject);
     });
 
 
