@@ -20,7 +20,7 @@ function createFields() {
             'text': i + 1,
         }).appendTo(container);
     }
-    console.log("create run");
+    // console.log("create run");
 }
 
 function distributeFields(deg) {

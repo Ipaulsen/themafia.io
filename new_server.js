@@ -5,6 +5,7 @@ var express = require('express'),//web frame work
     util = require('util'),
     server  = http.createServer(app),
     port    = 8080,
+    colors  = require('colors'),
     game_sockets = {}; //socket_id is the key, socket_dict is the value
     join_codes = {}; //4 digit code is the key, socket_id is the value
 
@@ -55,7 +56,6 @@ var GameBoard = function(name) {
 
 //when someone connects (game board or controller)
 io.sockets.on('connection', function (socket) { 
-
 	socket.on('board_connect', function(){ //a game board connected.
 		//This message is going to be sent after the user selects "start a new game"
 		//initiate a new game board with a unique id
@@ -68,10 +68,14 @@ io.sockets.on('connection', function (socket) {
 			join_code = Math.floor(1000 + Math.random() * 9000);
 		}
 		join_codes[join_code] = socket.id;
-		game_sockets[socket.id] = socket;
+		game_sockets[socket.id] = {
+			socket: socket, 
+			controller_sockets: {}
+		};
 		console.log("Join code: "+util.inspect(join_codes));
 		//Let the board know that they are connected to the server and send the join codes for the controller to use.
 		socket.emit("game_connected",join_code);
+		console.log("game sockets: "+util.inspect(game_sockets).green);
 	});
 	//there will be no controller id param if there has not been one created.
 	socket.on('controller_connect', function(game_id,controller_id){
@@ -79,12 +83,38 @@ io.sockets.on('connection', function (socket) {
 		//append game socket with /# (this was appended on the game socket creation by socket.io)
 		game_id = "/#"+game_id;
 		if (game_sockets[game_id]){
+			//add new controller socket id into join_codes object
+			// game_sockets[game_id][socket.id] = socket.id;
+			console.log("controller socket id: "+util.inspect(socket.id).red);	
+			//if the controller_sockets object is empty then the palyer connecting is player 1.
+			//controller_sockets object stores the player number as the key and the controllers socket id so the server can relay mesages back and forth between the game board socket and the controller socket.
+			if(Object.keys(game_sockets[game_id].controller_sockets).length == 0){
+				game_sockets[game_id].controller_sockets['1'] = socket.id;
+			}
+			else{
+				function count(obj) {
+				   var count=0;
+				   for(var prop in obj) {
+				      if (obj.hasOwnProperty(prop)) {
+				         ++count;
+				      }
+				   }
+				   return count;
+				}
+				//Get the number of players in the game and push in new players.
+				var playerCount = count(game_sockets[game_id].controller_sockets);
+				playerCount = playerCount+1;
+				game_sockets[game_id].controller_sockets[playerCount] = socket.id;
+				console.log("number of players: "+playerCount);
+			}
+			console.log("game_sockets[game_id]: "+util.inspect(game_sockets[game_id]).yellow);
 			//we will need another if statement to check to see if the controller is already taken.
 			//This message is going to be sent when the user selects "join a game", and then inputs the game id.
 			//look up the game board and make sure that it's 'open'.
 			//add a controller to the game board
 			//notify the game board of the new player.
-			console.log("Controller connected:"+ game_id);
+
+			console.log("Controller connected- game ID:"+ game_id);	
 			socket.emit("controller_connected",true,0);//right now this is 0 but should be the player number that the game board has stored.
 		}
 		else {
@@ -97,10 +127,13 @@ io.sockets.on('connection', function (socket) {
         //we could change this to 'notify_controller'. Basically we need a function to pass messages from the board to one or all of the controllers.
     });
 
-    socket.on('notify_board', function(playerObject){ //a game board connected.
+    socket.on('notify_board', function(playerObject,GBsocket){ //a game board connected.
         //basically this needs to just pass messages from the controller to the board.
         console.log(playerObject);
-        io.emit('notify_board', playerObject);
+		console.log("GBsocket: "+GBsocket);
+		console.log(("socket: "+util.inspect(socket)).cyan);
+		GBsocket = "/#"+GBsocket;
+        io.sockets.connected[GBsocket].emit('notify_board', playerObject);
     });
 
 

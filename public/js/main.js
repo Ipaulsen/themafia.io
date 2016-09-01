@@ -1,18 +1,19 @@
 // global vars
-var playerCount;
 
 //controller vars
 var playerID;
 
 //gameboard vars
 var dashBoard = {};
+var playerCount;
 
 var io = io.connect();
 
 io.on('connect', function() {
 	//controller connect logic
 	if (window.location.href.indexOf('?id=') > 0) {
-		io.emit('controller_connect', window.location.href.split('?id=')[1]);
+		var GBsocket = window.location.href.split('?id=')[1];
+		io.emit('controller_connect', GBsocket);
 		io.on('controller_connected', function(connected,playerNumber) {
 		//switch to controller view and hide gameBoard
 		console.log("enter controller_connected io on")
@@ -21,10 +22,11 @@ io.on('connect', function() {
 			var playerName = prompt("Enter your name:");
 			$("#controllerMessage").append(playerName+" is player :"+playerNumber);
 			var playerObject = {playerNumber: playerNumber,playerName: playerName}
-			io.emit('notify_board', playerObject);
+			io.emit('notify_board', playerObject, GBsocket);
 		} else {
 			alert("Your a controller - Not connected!");
 		}
+
 
 	});
 	} else {
@@ -32,7 +34,7 @@ io.on('connect', function() {
 		io.emit('board_connect');
 		$("#gameBoard").css("display","block");
 		var game_connected = function(join_code) {
-			console.log(game_connected+","+join_code);
+			console.log("Join code: "+join_code);
 			var url = "http://localhost:8080/raos?code=" + join_code;
 			$("#urlController").append("Url for Mafia members only: "+"<a href=\""+url+"\" target=\"_blank\">"+url+"</a>");
 			io.removeListener('game_connected', game_connected);
