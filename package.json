@@ -5,6 +5,7 @@
     "express": "*"
   },
   "dependencies": {
+    "lodash": "^4.15.0",
     "socket.io": "^1.4.8"
   }
 }

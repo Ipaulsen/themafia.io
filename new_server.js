@@ -136,10 +136,22 @@ io.sockets.on('connection', function (socket) {
         io.sockets.connected[GBsocket].emit('notify_board', playerObject);
     });
 
-
-	//on socket disconnection
+	//on socket disconnection delete games from server objects
 	socket.on('disconnect', function () {
-		//if a game board disconnects then destroy the whole game. 
-		//if a game controller disconnects, then destroy the player (have it be taken over by AI?)
+		if (game_sockets[socket.id]) {
+			var tempGameSocket = game_sockets[socket.id].socket.conn.id;
+			tempGameSocket = "/#"+tempGameSocket;
+			console.log("Game disconnected: "+util.inspect(tempGameSocket));
+			Object.prototype.getKeyByValue = function( value ) {
+			    for( var prop in this ) {
+			        if( this.hasOwnProperty( prop ) ) {
+			             if( this[ prop ] === value )
+			                 return prop;
+			        }
+			    }
+			}
+			delete join_codes[join_codes.getKeyByValue(tempGameSocket)]; //delete join code
+			delete game_sockets[socket.id];
+		}
 	});
 });

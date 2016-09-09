@@ -12,10 +12,10 @@ p{
     margin: 0 auto;
 }
 #gameBoard{
-    // background-image: url('../img/mafia-bg.png');
+    background-image: url('../img/mafia-bg.png');
     background-color: #000;
-    background-size: cover;
-    background-repeat: no-repeat;
+    // background-size: cover;
+    // background-repeat: no-repeat;
     width: 100%;
     height: 100%;
     margin: 0 auto;
@@ -26,10 +26,10 @@ p{
     display: none;
 }
 #controller{
-    // background-image: url('../img/mafia-bg-controller.png');
+    background-image: url('../img/mafia-bg-controller.png');
     background-color: #000;
-    background-size: cover;
-    background-repeat: no-repeat;
+    // background-size: cover;
+    // background-repeat: no-repeat;
     width: 100%;
     height: 100%;
     margin: 0 auto;
