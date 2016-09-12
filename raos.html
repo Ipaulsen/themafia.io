@@ -7,21 +7,34 @@
   <script src="public/js/jquery-1.11.0.js" type="text/javascript"></script>
 </head>
 <link href="public/css/main.css" rel="stylesheet">
-<body>
 <script src="public/js/main.js"></script>
+<script src="public/js/board.js"></script>
+<script src="public/js/controller.js"></script>
+<body>
 <section id="gameBoard">
 	<div id="playerCrossHairs">
 		<div id="container">
-		    <div id="center"></div>
+		    <div id="center">
+				<div class="round">
+					<input type="checkbox" id="onoff" name="onoff" />
+						<div class="back">
+							<label id="onofflabel" class="but" for="onoff" onclick="startGame();">
+								<span class="on">0</span>
+								<span class="off">I</span>
+							</label>
+						</div>
+					</div>
+		    	<div id="centerPromt"></div>
+		    </div>
 		    <div id="crosshair-x"></div>
 		    <div id="crosshair-y"></div>
 		</div>	
 		<div id="message">
-			Number of players: <input type="text" value="0" />
+<!-- 			Number of players: <input type="text" value="0" />
 			<button id="addone">++</button>
 			<button id="delone">--</button>
 			<br>
-			<p id="urlController"></p>
+			<p id="urlController"></p> -->
 		</div>
 	</div>
 </section>

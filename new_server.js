@@ -90,6 +90,8 @@ io.sockets.on('connection', function (socket) {
 			//controller_sockets object stores the player number as the key and the controllers socket id so the server can relay mesages back and forth between the game board socket and the controller socket.
 			if(Object.keys(game_sockets[game_id].controller_sockets).length == 0){
 				game_sockets[game_id].controller_sockets['1'] = socket.id;
+				//send player number to GB and controller.
+				socket.emit("controller_connected",true,1);
 			}
 			else{
 				function count(obj) {
@@ -105,6 +107,7 @@ io.sockets.on('connection', function (socket) {
 				var playerCount = count(game_sockets[game_id].controller_sockets);
 				playerCount = playerCount+1;
 				game_sockets[game_id].controller_sockets[playerCount] = socket.id;
+				socket.emit("controller_connected",true,playerCount);
 				console.log("number of players: "+playerCount);
 			}
 			console.log("game_sockets[game_id]: "+util.inspect(game_sockets[game_id]).yellow);
@@ -115,7 +118,6 @@ io.sockets.on('connection', function (socket) {
 			//notify the game board of the new player.
 
 			console.log("Controller connected- game ID:"+ game_id);	
-			socket.emit("controller_connected",true,0);//right now this is 0 but should be the player number that the game board has stored.
 		}
 		else {
 			console.log("Controller attempted to connect but failed 1st else");

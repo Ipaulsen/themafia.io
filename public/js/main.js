@@ -1,12 +1,5 @@
 // global vars
 
-//controller vars
-var playerID;
-
-//gameboard vars
-var dashBoard = {};
-var playerCount;
-
 var io = io.connect();
 
 io.on('connect', function() {
@@ -35,8 +28,7 @@ io.on('connect', function() {
 		$("#gameBoard").css("display","block");
 		var game_connected = function(join_code) {
 			console.log("Join code: "+join_code);
-			var url = "http://localhost:8080/raos?code=" + join_code;
-			$("#urlController").append("Url for Mafia members only: "+"<a href=\""+url+"\" target=\"_blank\">"+url+"</a>");
+			$("#message").append("Join Code: "+"<span class=\"fontNumbers\">"+join_code+"</span>");
 			io.removeListener('game_connected', game_connected);
 		};
 		io.on('game_connected', game_connected);
@@ -50,6 +42,7 @@ io.on('connect', function() {
 			console.log("Player Number: "+playerObject.playerNumber);
 			console.log("Player Name: "+playerObject.playerName);
 			addOne(playerObject.playerName);
+			players.push(playerObject);
 		// }
 	});
 });

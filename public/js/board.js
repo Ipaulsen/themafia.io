@@ -26,7 +26,8 @@ var SPECIAL_CHARACTER_VOTE_STATE = "special_char_vote";
 //this is initilized by main.js
 // var io = io.connect();
 
-
+//gameboard vars
+var dashBoard = {};
 var players = [];
 var current_state;
 
@@ -74,3 +75,28 @@ io.on('notify_board', function(picked_players) {
 			//if yes, then zero the timer and call timer_up()
 	}
 });
+//fires when the power button is hit.
+var startGameButtonStat = 0;
+function startGame() {
+	var playersLength = players.length;
+	if(startGameButtonStat == 0){
+		if(playersLength < 6){
+			alert("Need a minimum of 7 players!");
+			startGameButtonStat = 1;
+			document.getElementById("onofflabel").click();
+			startGameButtonStat = 0;
+		}
+		else{
+			$("#gameBoard").addClass("gameBoardfade");
+			setTimeout(function() { 
+				$(".round").addClass("roundAdd");
+			}, 1000);
+			setTimeout(function() { 
+				$(".round").css("display","none");
+			}, 2500);
+			setTimeout(function() { 
+				$("#message").html("");
+			}, 2500);
+		}
+	}
+}

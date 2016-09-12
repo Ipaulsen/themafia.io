@@ -1,6 +1,8 @@
 //we don't need to redefine the player and the board classes because raos.html will include both board.js and controller.js
 //this is initilized by main.js
 // var io = io.connect();
+//controller vars
+var playerID;
 
 function join_game(game_id){
 	//send 'controller_connect' message to server so it can keep track of us.
